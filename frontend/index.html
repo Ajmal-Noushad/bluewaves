@@ -1,0 +1,167 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Waves | Swim • Train • Thrive</title>
+  <meta name="description" content="Blue Waves is a premium aquatic center offering expert coaching, kids programs, and public swim access for all skill levels." />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar navbar-expand-lg fixed-top custom-nav" id="navbar">
+      <div class="container-fluid px-4 px-lg-5">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+          <img src="assets/logo.png" alt="Blue Waves Logo" height="48">
+          <span class="brand-text">Blue Waves</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+          <i class="bi bi-list text-white fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="programs.html">Programs</a></li>
+            <li class="nav-item"><a class="nav-link" href="membership.html">Membership</a></li>
+            <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-brand rounded-pill px-4" href="admin-login.html">Admin Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero-section">
+      <div class="hero-overlay"></div>
+      <div class="wave"></div>
+
+      <div class="container position-relative z-2">
+        <div class="row align-items-center min-vh-100">
+          <div class="col-lg-7 text-white animate-on-scroll">
+            <h1 class="hero-title mb-4">
+              Swim.<br>
+              Train.<br>
+              Thrive.
+            </h1>
+
+            <p class="hero-text mb-4">
+              A premium aquatic center designed for beginners, athletes, families, and fitness swimmers—
+              with expert coaching, safe kids learning spaces, and public swim access.
+            </p>
+
+            <div class="d-flex gap-3 flex-wrap">
+              <a href="programs.html" class="btn btn-brand btn-lg rounded-pill px-4">Explore Programs</a>
+              <a href="contact.html" class="btn btn-outline-light btn-lg rounded-pill px-4">Call to Enquire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="section-space bg-white">
+      <div class="container">
+        <div class="section-title text-center animate-on-scroll">
+          <span>WHY CHOOSE US</span>
+          <h2>Built for Every Swimmer</h2>
+        </div>
+
+        <div class="row g-4 mt-2">
+          <div class="col-md-4">
+            <div class="feature-card animate-on-scroll delay-100">
+              <i class="bi bi-award"></i>
+              <h5>Certified Coaching</h5>
+              <p>Professional guidance for beginners to advanced swimmers.</p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="feature-card animate-on-scroll delay-200">
+              <i class="bi bi-shield-check"></i>
+              <h5>Safe Environment</h5>
+              <p>Clean facilities, monitored sessions, and learner-friendly design.</p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="feature-card animate-on-scroll delay-300">
+              <i class="bi bi-water"></i>
+              <h5>Kids Pool + Main Pool</h5>
+              <p>Dedicated areas for young learners and full-length swimming sessions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRAMS -->
+    <section class="section-space bg-soft">
+      <div class="container">
+        <div class="section-title text-center animate-on-scroll">
+          <span>PROGRAMS</span>
+          <h2>Swim Your Way</h2>
+        </div>
+
+        <div class="row g-4 mt-2">
+          <div class="col-md-6 col-lg-3"><div class="program-card animate-on-scroll delay-100"><h5>Learn to Swim</h5><p>Structured beginner lessons for all ages.</p></div></div>
+          <div class="col-md-6 col-lg-3"><div class="program-card animate-on-scroll delay-200"><h5>Kids Aquatic Program</h5><p>Safe guided swimming for young learners.</p></div></div>
+          <div class="col-md-6 col-lg-3"><div class="program-card animate-on-scroll delay-300"><h5>Fitness Swimming</h5><p>Open lap swimming for wellness and endurance.</p></div></div>
+          <div class="col-md-6 col-lg-3"><div class="program-card animate-on-scroll delay-100"><h5>Professional Coaching</h5><p>Technique, stroke correction, and performance training.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section class="section-space schedule-section text-white">
+      <div class="container">
+        <div class="section-title text-center animate-on-scroll">
+          <span>TODAY'S SESSIONS</span>
+          <h2 class="text-white">Live Schedule Board</h2>
+        </div>
+
+        <div class="schedule-board mt-4 animate-on-scroll delay-100">
+          <div class="schedule-item"><span>5:30 AM — Fitness Swim</span><b class="open">OPEN</b></div>
+          <div class="schedule-item"><span>7:00 AM — Public Session</span><b class="open">OPEN</b></div>
+          <div class="schedule-item"><span>4:00 PM — Kids Coaching</span><b class="few">FEW SLOTS</b></div>
+          <div class="schedule-item"><span>5:30 PM — Advanced Coaching</span><b class="full">FULL</b></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer text-white">
+    <div class="container text-center animate-on-scroll">
+      <img src="assets/logo.png" height="60" class="mb-3" alt="Blue Waves Logo">
+      <h5>Blue Waves Aquatic Center</h5>
+      <p>Learn • Train • Relax</p>
+      <p class="small opacity-75 mb-0">© 2026 Blue Waves. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
