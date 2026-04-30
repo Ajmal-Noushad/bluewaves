@@ -53,58 +53,8 @@
 
     <section class="section-space bg-soft">
       <div class="container">
-        <div class="row g-5">
-          <!-- Program 1 -->
-          <div class="col-lg-6">
-            <div class="program-card h-100" style="min-height: 500px;">
-              <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80" alt="Adult Mastery">
-              <div class="program-card-content" style="background: linear-gradient(to top, rgba(5, 11, 20, 1) 0%, rgba(5, 11, 20, 0.7) 50%, transparent 100%);">
-                <span class="text-uppercase text-primary small fw-bold mb-2 d-block" style="letter-spacing: 2px;">Ages 16+</span>
-                <h3>Adult Mastery & Technique</h3>
-                <p class="mb-4">Designed for intermediate and advanced swimmers looking to refine their stroke mechanics. This program utilizes video analysis and personalized drills from elite coaches to maximize your efficiency in the water. We focus on freestyle perfection, open water strategies, and endurance building.</p>
-                <a href="contact.html" class="btn btn-outline-light btn-sm">Inquire Now</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Program 2 -->
-          <div class="col-lg-6">
-            <div class="program-card h-100" style="min-height: 500px;">
-              <img src="https://images.unsplash.com/photo-1600965962102-9d260a71890d?auto=format&fit=crop&w=800&q=80" alt="Youth Academy">
-              <div class="program-card-content" style="background: linear-gradient(to top, rgba(5, 11, 20, 1) 0%, rgba(5, 11, 20, 0.7) 50%, transparent 100%);">
-                <span class="text-uppercase text-primary small fw-bold mb-2 d-block" style="letter-spacing: 2px;">Ages 4 - 15</span>
-                <h3>Youth Elite Academy</h3>
-                <p class="mb-4">A structured, multi-level curriculum designed to build absolute confidence and safety in the water. From their first bubbles to advanced competitive strokes, our Youth Academy provides a nurturing environment with a low student-to-teacher ratio to ensure rapid, safe progression.</p>
-                <a href="contact.html" class="btn btn-outline-light btn-sm">Inquire Now</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Program 3 -->
-          <div class="col-lg-6">
-            <div class="program-card h-100" style="min-height: 500px;">
-              <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=800&q=80" alt="Aquatic Fitness">
-              <div class="program-card-content" style="background: linear-gradient(to top, rgba(5, 11, 20, 1) 0%, rgba(5, 11, 20, 0.7) 50%, transparent 100%);">
-                <span class="text-uppercase text-primary small fw-bold mb-2 d-block" style="letter-spacing: 2px;">All Levels</span>
-                <h3>High-Performance Aqua HIIT</h3>
-                <p class="mb-4">Ditch the treadmill and embrace the resistance of water. This high-intensity, low-impact class combines cardiovascular bursts with strength conditioning. Perfect for injury rehabilitation or athletes looking for a rigorous cross-training alternative.</p>
-                <a href="contact.html" class="btn btn-outline-light btn-sm">Inquire Now</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Program 4 -->
-          <div class="col-lg-6">
-            <div class="program-card h-100" style="min-height: 500px;">
-              <img src="https://images.unsplash.com/photo-1582299790691-37d4538804cb?auto=format&fit=crop&w=800&q=80" alt="Private Coaching">
-              <div class="program-card-content" style="background: linear-gradient(to top, rgba(5, 11, 20, 1) 0%, rgba(5, 11, 20, 0.7) 50%, transparent 100%);">
-                <span class="text-uppercase text-primary small fw-bold mb-2 d-block" style="letter-spacing: 2px;">1-on-1</span>
-                <h3>Private Executive Coaching</h3>
-                <p class="mb-4">Bespoke training sessions tailored entirely to your goals and schedule. Whether you are training for a triathlon, overcoming water anxiety, or seeking elite athletic conditioning, our master coaches provide undivided attention and specialized curriculum.</p>
-                <a href="contact.html" class="btn btn-outline-light btn-sm">Inquire Now</a>
-              </div>
-            </div>
-          </div>
+        <div class="row g-5" id="programsContainer">
+          <div class="col-12 text-center text-muted">Loading programs...</div>
         </div>
       </div>
     </section>
@@ -156,5 +106,45 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/script.js"></script>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './js/supabase-config.js';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadPrograms() {
+      const container = document.getElementById('programsContainer');
+      try {
+        const { data, error } = await supabase.from('programs').select('*').order('order_val');
+        container.innerHTML = '';
+        if(error) throw error;
+
+        if(!data || data.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted">No programs listed yet. Check back soon!</div>';
+          return;
+        }
+        
+        data.forEach((item) => {
+          container.innerHTML += `
+            <div class="col-lg-6">
+              <div class="program-card h-100 animate-on-scroll is-visible" style="min-height: 500px;">
+                <img src="${item.image}" alt="${item.title}">
+                <div class="program-card-content" style="background: linear-gradient(to top, rgba(5, 11, 20, 1) 0%, rgba(5, 11, 20, 0.7) 50%, transparent 100%);">
+                  <span class="text-uppercase text-primary small fw-bold mb-2 d-block" style="letter-spacing: 2px;">${item.ages}</span>
+                  <h3>${item.title}</h3>
+                  <p class="mb-4">${item.desc}</p>
+                  <a href="contact.html" class="btn btn-outline-light btn-sm">Inquire Now</a>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    loadPrograms();
+  </script>
 </body>
 </html>

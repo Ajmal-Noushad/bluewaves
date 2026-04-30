@@ -53,37 +53,8 @@
 
     <section class="section-space bg-white">
       <div class="container">
-        <div class="row g-4">
-          <div class="col-md-8">
-            <div class="animate-on-scroll delay-100 overflow-hidden" style="height: 400px;">
-              <img src="https://images.unsplash.com/photo-1576014131795-d440191a8e8b?auto=format&fit=crop&w=1200&q=80" alt="Main Pool" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="animate-on-scroll delay-200 overflow-hidden" style="height: 400px;">
-              <img src="https://images.unsplash.com/photo-1540324155974-7523202daa3f?auto=format&fit=crop&w=600&q=80" alt="Locker Room" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="animate-on-scroll delay-100 overflow-hidden" style="height: 400px;">
-              <img src="https://images.unsplash.com/photo-1573849931753-1579d45e5a2e?auto=format&fit=crop&w=600&q=80" alt="Relaxation Area" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="animate-on-scroll delay-200 overflow-hidden" style="height: 400px;">
-              <img src="https://images.unsplash.com/photo-1565814636199-ae8133055c1c?auto=format&fit=crop&w=1200&q=80" alt="Kids Pool" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-          <div class="col-md-6">
-             <div class="animate-on-scroll delay-100 overflow-hidden" style="height: 400px;">
-              <img src="https://images.unsplash.com/photo-1560067174-c5a3a8f37060?auto=format&fit=crop&w=1000&q=80" alt="Fitness Area" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
-           <div class="col-md-6">
-             <div class="animate-on-scroll delay-200 overflow-hidden" style="height: 400px;">
-              <img src="https://images.unsplash.com/photo-1620619767323-b95a89183081?auto=format&fit=crop&w=1000&q=80" alt="Reception" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-          </div>
+        <div class="row g-4" id="galleryContainer">
+          <div class="col-12 text-center text-muted">Loading gallery...</div>
         </div>
       </div>
     </section>
@@ -135,5 +106,44 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/script.js"></script>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './js/supabase-config.js';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadGallery() {
+      const container = document.getElementById('galleryContainer');
+      try {
+        const { data, error } = await supabase.from('gallery').select('*').order('order_val');
+        container.innerHTML = '';
+        if(error) throw error;
+
+        if(!data || data.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center text-muted">No images yet. Admin needs to upload some!</div>';
+          return;
+        }
+        
+        let i = 0;
+        data.forEach((item) => {
+          // Alternate sizes slightly for a masonry-like feel based on index
+          const cols = (i % 5 === 0 || i % 5 === 3) ? 'col-md-8' : 'col-md-4';
+          
+          container.innerHTML += `
+            <div class="${cols}">
+              <div class="animate-on-scroll is-visible overflow-hidden" style="height: 400px;">
+                <img src="${item.url}" alt="${item.alt || 'Gallery Image'}" class="img-fluid w-100 h-100 object-fit-cover hover-zoom" style="transition: transform 0.5s ease; cursor: pointer;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+              </div>
+            </div>
+          `;
+          i++;
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    loadGallery();
+  </script>
 </body>
 </html>

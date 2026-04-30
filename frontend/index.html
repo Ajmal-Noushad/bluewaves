@@ -24,7 +24,6 @@
     <nav class="navbar navbar-expand-lg fixed-top custom-nav" id="navbar">
       <div class="container px-4 px-lg-5">
         <a class="navbar-brand d-flex align-items-center gap-3" href="index.html">
-          <!-- Placeholder for Logo if needed, text looks premium with Playfair Display -->
           <span class="brand-text">BLUE WAVES</span>
         </a>
 
@@ -130,39 +129,8 @@
           <a href="programs.html" class="btn btn-outline-dark d-none d-md-inline-block">View All</a>
         </div>
 
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="program-card animate-on-scroll delay-100">
-              <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80"
-                alt="Adult Swimming">
-              <div class="program-card-content">
-                <h5>Adult Mastery</h5>
-                <p>Refine your strokes, build endurance, and achieve your personal best with our adult mastery sessions.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="program-card animate-on-scroll delay-200">
-              <img src="https://images.unsplash.com/photo-1600965962102-9d260a71890d?auto=format&fit=crop&w=800&q=80"
-                alt="Kids Swimming">
-              <div class="program-card-content">
-                <h5>Youth Academy</h5>
-                <p>Instilling water confidence and foundational skills in young swimmers in a safe, engaging
-                  environment.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="program-card animate-on-scroll delay-300">
-              <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=800&q=80"
-                alt="Fitness Swimming">
-              <div class="program-card-content">
-                <h5>Aquatic Fitness</h5>
-                <p>High-intensity, low-impact aquatic workouts designed to sculpt and tone the entire body.</p>
-              </div>
-            </div>
-          </div>
+        <div class="row g-4" id="homeProgramsGrid">
+          <div class="col-12 text-center text-muted">Loading programs...</div>
         </div>
         <div class="text-center mt-4 d-md-none animate-on-scroll">
           <a href="programs.html" class="btn btn-outline-dark">View All</a>
@@ -185,27 +153,8 @@
             </div>
           </div>
           <div class="col-lg-6 offset-lg-1 animate-on-scroll delay-200">
-            <div class="premium-box">
-              <div class="schedule-item">
-                <span class="schedule-time">06:00 AM</span>
-                <span class="schedule-name">Morning Lap Swim</span>
-                <span class="status-badge status-open">Open</span>
-              </div>
-              <div class="schedule-item">
-                <span class="schedule-time">09:00 AM</span>
-                <span class="schedule-name">Aqua Aerobics</span>
-                <span class="status-badge status-few">Few Slots</span>
-              </div>
-              <div class="schedule-item">
-                <span class="schedule-time">02:00 PM</span>
-                <span class="schedule-name">Youth Academy Level 2</span>
-                <span class="status-badge status-full">Full</span>
-              </div>
-              <div class="schedule-item">
-                <span class="schedule-time">06:00 PM</span>
-                <span class="schedule-name">Adult Mastery</span>
-                <span class="status-badge status-open">Open</span>
-              </div>
+            <div class="premium-box" id="homeSlotsBoard">
+              <div class="text-center text-white">Loading schedule...</div>
             </div>
           </div>
         </div>
@@ -261,6 +210,78 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/script.js"></script>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    import { SUPABASE_URL, SUPABASE_ANON_KEY } from './js/supabase-config.js';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Fetch Programs
+    async function fetchPrograms() {
+      const grid = document.getElementById('homeProgramsGrid');
+      try {
+        const { data, error } = await supabase.from('programs').select('*').order('order_val').limit(3);
+        grid.innerHTML = '';
+        if(error) throw error;
+        
+        if(!data || data.length === 0) {
+          grid.innerHTML = '<div class="col-12 text-center text-muted">No programs currently available.</div>';
+          return;
+        }
+        
+        data.forEach((item) => {
+          grid.innerHTML += `
+            <div class="col-md-4">
+              <div class="program-card animate-on-scroll is-visible">
+                <img src="${item.image}" alt="${item.title}">
+                <div class="program-card-content">
+                  <h5>${item.title}</h5>
+                  <p>${item.desc.substring(0, 80)}...</p>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Fetch Slots
+    async function fetchSlots() {
+      const board = document.getElementById('homeSlotsBoard');
+      try {
+        const { data, error } = await supabase.from('slots').select('*').order('order_val');
+        board.innerHTML = '';
+        if(error) throw error;
+
+        if(!data || data.length === 0) {
+          board.innerHTML = '<div class="text-center text-white">No schedule uploaded for today.</div>';
+          return;
+        }
+        
+        data.forEach((item) => {
+          let statusClass = 'status-full';
+          if(item.status === 'Open') statusClass = 'status-open';
+          if(item.status === 'Few Slots') statusClass = 'status-few';
+          
+          board.innerHTML += `
+            <div class="schedule-item">
+              <span class="schedule-time">${item.time}</span>
+              <span class="schedule-name">${item.name}</span>
+              <span class="status-badge ${statusClass}">${item.status}</span>
+            </div>
+          `;
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    fetchPrograms();
+    fetchSlots();
+  </script>
 </body>
 
 </html>
